@@ -1,0 +1,8 @@
+name    'puppet-dropbox'
+version '0.0.2'
+source 'git://github.com/igama/puppet-dropbox'
+author 'Marco da Silva'
+license 'Apache Version 2.0'
+summary 'Dropbox CLI for Debian'
+description 'Dropbox CLI Module for Debian, Ubuntu'
+project_page 'http://github.com/igama/puppet-dropbox'
