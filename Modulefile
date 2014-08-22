@@ -1,5 +1,5 @@
 name    'puppet-dropbox'
-version '0.0.2'
+version '0.0.4'
 source 'git://github.com/igama/puppet-dropbox'
 author 'Marco da Silva'
 license 'Apache Version 2.0'
