@@ -10,8 +10,7 @@
 # Description: starts dropbox using start-stop-daemon
 ### END INIT INFO
 
-# dropbox service users
-DROPBOX_USERS="dropbox-user"
+. /etc/default/dropbox
 
 DAEMON=.dropbox-dist/dropbox-lnx.*/dropbox
 
