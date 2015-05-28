@@ -18,8 +18,9 @@ start() {
    echo "Starting dropbox..."
    for dbuser in $DROPBOX_USERS; do
        HOMEDIR=$(getent passwd $dbuser | cut -d: -f6)
-       if [ -x $HOMEDIR/$DAEMON ]; then
-           HOME="$HOMEDIR" start-stop-daemon -b -o -c $dbuser -S -u $dbuser -x $HOMEDIR/$DAEMON
+       daemon="$(ls $HOMEDIR/$DAEMON | tail -1)"
+       if [ -x "$daemon" ]; then
+           HOME="$HOMEDIR" start-stop-daemon -b -o -c $dbuser -S -u $dbuser -x "$daemon"
        fi
    done
 }
@@ -28,8 +29,9 @@ stop() {
    echo "Stopping dropbox..."
    for dbuser in $DROPBOX_USERS; do
        HOMEDIR=$(getent passwd $dbuser | cut -d: -f6)
-       if [ -x $HOMEDIR/$DAEMON ]; then
-           start-stop-daemon -o -c $dbuser -K -u $dbuser -x $HOMEDIR/$DAEMON
+       daemon="$(ls $HOMEDIR/$DAEMON | tail -1)"
+       if [ -x "$daemon" ]; then
+           start-stop-daemon -o -c $dbuser -K -u $dbuser -x "$daemon"
        fi
    done
 }
