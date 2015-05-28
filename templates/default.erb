@@ -1,2 +1,3 @@
 # Dropbox service users
-DROPBOX_USERS="<%= scope.lookupvar('dropbox::user') %>"
+DROPBOX_MAIN_USER="<%= scope.lookupvar('dropbox::user') %>"
+DROPBOX_USERS="<%= scope.lookupvar('dropbox::instances').join(' ') %>"
