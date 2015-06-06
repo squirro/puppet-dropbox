@@ -17,13 +17,13 @@ class dropbox::package {
 
   exec { 'download-dropbox':
     command => "wget -O /tmp/dropbox.tar.gz \"http://www.dropbox.com/download/?plat=lnx.${download_arch}\"",
-    unless => 'test -d ~${dropbox::user}/.dropbox-dist',
+    unless => "test -d ${dropbox::user}/.dropbox-dist",
     require => User[$dropbox::user],
   }
 
   exec { 'install-dropbox':
     command => "tar -zxvf /tmp/dropbox.tar.gz -C ~${dropbox::user}",
-    unless => 'test -d ~${dropbox::user}/.dropbox-dist',
+    unless => "test -d ${dropbox::user}/.dropbox-dist",
     require => Exec['download-dropbox'],
   }
 

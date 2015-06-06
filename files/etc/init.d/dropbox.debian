@@ -10,40 +10,39 @@
 # Description: starts dropbox using start-stop-daemon
 ### END INIT INFO
 
-# dropbox service users
-DROPBOX_USERS="dropbox-user"
+. /etc/default/dropbox
 
-DAEMON=.dropbox-dist/dropbox-lnx.*/dropbox
+
+HOMEDIR_MAIN=$(getent passwd $DROPBOX_MAIN_USER | cut -d: -f6)
+DAEMON="$(ls $HOMEDIR_MAIN/.dropbox-dist/dropbox-lnx.*/dropbox | tail -1)"
 
 start() {
-   echo "Starting dropbox..."
-   for dbuser in $DROPBOX_USERS; do
-       HOMEDIR=$(getent passwd $dbuser | cut -d: -f6)
-       if [ -x $HOMEDIR/$DAEMON ]; then
-           HOME="$HOMEDIR" start-stop-daemon -b -o -c $dbuser -S -u $dbuser -x $HOMEDIR/$DAEMON
-       fi
-   done
+    for dbuser in $DROPBOX_USERS; do
+        echo "Starting dropbox $dbuser..."
+        HOMEDIR=$(getent passwd $dbuser | cut -d: -f6)
+        HOME="$HOMEDIR" start-stop-daemon -b -o -c $dbuser -S -u $dbuser -x "$DAEMON"
+    done
 }
 
 stop() {
-   echo "Stopping dropbox..."
-   for dbuser in $DROPBOX_USERS; do
-       HOMEDIR=$(getent passwd $dbuser | cut -d: -f6)
-       if [ -x $HOMEDIR/$DAEMON ]; then
-           start-stop-daemon -o -c $dbuser -K -u $dbuser -x $HOMEDIR/$DAEMON
-       fi
-   done
+    for dbuser in $DROPBOX_USERS; do
+        echo "Stopping dropbox $dbuser..."
+        start-stop-daemon -o -c $dbuser -K -u $dbuser -x "$DAEMON"
+    done
 }
 
 status() {
+   ret=0
    for dbuser in $DROPBOX_USERS; do
        dbpid=$(pgrep -u $dbuser dropbox)
        if [ -z $dbpid ] ; then
            echo "dropboxd for USER $dbuser: not running."
+           ret=1
        else
            echo "dropboxd for USER $dbuser: running (pid $dbpid)"
        fi
    done
+   exit $ret
 }
 
 case "$1" in
